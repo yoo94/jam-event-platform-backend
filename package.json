@@ -1,0 +1,25 @@
+{
+  "name": "jam-event-platform-backend",
+  "version": "1.0.0",
+  "description": "",
+  "license": "ISC",
+  "author": "",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "start:build": "tsc -w --project tsconfig.json && npx -p tsconfig.json",
+    "build:livenodemon": "nodemon --watch 'src/' --exec node --loader ts-node/esm src/main.ts --verbose",
+    "build:live": "npx tsx src/main.ts",
+    "start": "npm run build:live"
+  },
+  "dependencies": {
+    "fastify": "^5.4.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.10",
+    "nodemon": "^3.1.10",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.20.3",
+    "typescript": "^5.8.3"
+  }
+}
