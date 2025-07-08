@@ -1,10 +1,10 @@
 import { Secret } from "jsonwebtoken";
 
-export const FIRST_PWD = process.env.FIRST_PWD
-export const SECRET_KEY = process.env.SECRET_KEY as Secret;
-export const ROUND = Number(process.env.HASH_ROUNDS);
-export const ACCESS_TOKEN_EXPIRES = process.env.ACCESS_TOKEN_EXPIRES;
-export const REFRESH_TOKEN_EXPIRES = process.env.REFRESH_TOKEN_EXPIRES;
+const FIRST_PWD = process.env.FIRST_PWD
+const ROUND = Number(process.env.HASH_ROUND) 
+const SECRET_KEY = process.env.SECRET_KEY as Secret
+const ACCESS_TOKEN_EXPIRES = process.env.ACCESS_TOKEN_EXPIRES 
+const REFRESH_TOKEN_EXPIRES = process.env.REFRESH_TOKEN_EXPIRES
 
 const ERROR_MESSAGE = {
     badRequest:{
@@ -106,4 +106,12 @@ const SUCCESS_MESSAGE = {
 
 
 
-export  {ERROR_MESSAGE, SUCCESS_MESSAGE};
+export {
+  FIRST_PWD,
+  ROUND,
+  SECRET_KEY,
+  ACCESS_TOKEN_EXPIRES,
+  REFRESH_TOKEN_EXPIRES,  
+  ERROR_MESSAGE,
+  SUCCESS_MESSAGE,
+}
