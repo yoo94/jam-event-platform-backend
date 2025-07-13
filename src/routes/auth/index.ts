@@ -1,4 +1,4 @@
-import { loginSchema, registerSchema,logoutSchema } from "../../schema";
+import { loginSchema, registerSchema,logoutSchema,refreshTokenSchema } from "../../schema";
 import {TAuthBody} from "../../schema/types";
 import { FastifyInstance ,FastifyRequest, FastifyReply} from "fastify";
 import authService from "../../services/authService";
@@ -52,6 +52,7 @@ const authRoute = async (fastify: FastifyInstance) => {
       handleError(rep, ERROR_MESSAGE.badRequest, error)
     }
   })
+  
   fastify.delete('/logout', {schema: logoutSchema}, async (req: FastifyRequest, rep: FastifyReply) => {
     const refresh_token = req.cookies.refresh_token;
     if(!refresh_token) {
@@ -63,6 +64,19 @@ const authRoute = async (fastify: FastifyInstance) => {
       rep.status(SUCCESS_MESSAGE.logoutOk.status).send(SUCCESS_MESSAGE.logoutOk);
     }catch(error) {
       handleError(rep, ERROR_MESSAGE.badRequest, error)
+    }
+  })
+
+  fastify.post('refresh', {schema: refreshTokenSchema}, async (req: FastifyRequest, rep: FastifyReply) => {
+    const refresh_token = req.cookies.refresh_token;
+    if(!refresh_token) {
+      return rep.status(ERROR_MESSAGE.unauthorized.status).send(ERROR_MESSAGE.unauthorized);
+    }
+    try {
+      const result = await authService().refresh(refresh_token);
+      rep.status(201).send(result);
+    } catch (error) {
+      handleError(rep, ERROR_MESSAGE.badRequest, error);
     }
   })
 }

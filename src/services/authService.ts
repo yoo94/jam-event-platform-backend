@@ -1,5 +1,5 @@
 import db from "../lib/db";
-import { generateHash, duplicateVerifyUser, verifyPassword, generateAccessToken, generateRefreshToken } from "../lib/authHelper";
+import { generateHash, duplicateVerifyUser, verifyPassword, generateAccessToken, generateRefreshToken, verifyRefreshToken } from "../lib/authHelper";
 import { ERROR_MESSAGE } from "../lib/constants";
 
 function authService(){
@@ -72,7 +72,27 @@ function authService(){
       throw error
     }
   }
-  return { register, loginWithPassword , logout };
+  const refresh = async (refreshToken: string) => {
+    try {
+      if(!refreshToken) throw ERROR_MESSAGE.unauthorized
+      const authenticationUser = await verifyRefreshToken(refreshToken)
+      const userInfo = {
+        id: authenticationUser.id,
+        email: authenticationUser.email,
+      }
+      const accessToken = generateAccessToken(userInfo)
+      const returnValue = {
+        id: userInfo.id,
+        email: userInfo.email,
+        Authorization: accessToken,
+      }
+      return returnValue
+    } catch (error) {
+      throw error
+    }
+  }
+  
+  return { register, loginWithPassword, logout, refresh };
 }
 
 export default authService;

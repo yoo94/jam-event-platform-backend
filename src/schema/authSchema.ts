@@ -39,9 +39,20 @@ const logoutSchema = Type.Object({
   }),
 });
 
+const refreshTokenSchema = Type.Object({
+  response: Type.Object({
+    201: Type.Object({
+      id: Type.Number(),
+      email: Type.String(),
+      Authorization: Type.String(),
+    }),
+  }),
+});
+
 export {
     authBodySchema,
     registerSchema,
     loginSchema,
     logoutSchema,
+    refreshTokenSchema,
 }
