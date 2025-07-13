@@ -2,6 +2,7 @@ import bcrypt from 'bcrypt';
 import db from './db';
 import { ACCESS_TOKEN_EXPIRES, ERROR_MESSAGE ,REFRESH_TOKEN_EXPIRES,ROUND, SECRET_KEY} from './constants';
 import jwt , {JwtPayload} from 'jsonwebtoken'
+import { handleError } from './errorHelper';
 
 const generateHash= async (pwd: string) =>{
     console.log('Generating hash for password:', pwd, 'with ROUND:', ROUND);
@@ -56,6 +57,7 @@ const generateRefreshToken = (user: { id: number, email: string }) => {
   return refreshToken
 }
 
+// 유효한 refresh_token인지 확인
 const verifyRefreshToken = async( refresh_token: string) => {
   try {
     const decoded = jwt.verify(refresh_token, SECRET_KEY) as JwtPayload;
@@ -75,4 +77,34 @@ const verifyRefreshToken = async( refresh_token: string) => {
   }
 }
 
-export { generateHash, duplicateVerifyUser, verifyPassword, generateAccessToken, generateRefreshToken, verifyRefreshToken };
+// 토큰 상태만 체크
+const shortVerifyRefreshToken = async (refresh_token: string) => {
+  const decoded = jwt.verify(refresh_token, SECRET_KEY) as JwtPayload;
+  if (!decoded) {
+    return false;
+  }
+  else {
+    return true;
+  }
+}
+
+// 액세스 토큰 유효성 검사
+const verifyAccessToken = (access_token: string) => {
+  try {
+    const decoded = jwt.verify(access_token, SECRET_KEY) as JwtPayload;
+    return decoded;
+  } catch (error) {
+    throw ERROR_MESSAGE.invalidToken;
+  }
+}
+
+export {
+   generateHash,
+   duplicateVerifyUser,
+   verifyPassword,
+   generateAccessToken,
+   generateRefreshToken,
+   verifyRefreshToken,
+   shortVerifyRefreshToken,
+   verifyAccessToken
+};
