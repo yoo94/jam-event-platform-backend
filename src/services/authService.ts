@@ -26,51 +26,53 @@ function authService(){
     };
 
     const loginWithPassword = async (email: string, pwd: string) => {
-
+        try {
+          const authenticationUser = await db.user.findUnique({
+            where: {
+              email: email,
+            },
+            select: {
+              id: true,
+              email: true,
+            },
+          }) 
+          if(!authenticationUser) throw ERROR_MESSAGE.badRequest
+          const passwordVerification = await verifyPassword(email, pwd)
+          if(!passwordVerification) throw ERROR_MESSAGE.unauthorized
+          const accessToken =  generateAccessToken(authenticationUser)
+          const refreshToken = generateRefreshToken(authenticationUser)
+          const values ={
+            userId: authenticationUser.id,
+            refreshToken: refreshToken,
+          }
+          await db.token.create({
+            data: values,
+          })
+          const returnValue = {
+            id: authenticationUser.id,
+            email: authenticationUser.email,
+            accessToken: accessToken,
+            refreshToken: refreshToken
+          }
+          return returnValue
+        }
+        catch(error) {
+          throw error
+        }
+  }
+  const logout = async (refreshToken: string) => {
     try {
-
-      const authenticationUser = await db.user.findUnique({
+      const returnValue = await db.token.deleteMany({
         where: {
-          email: email,
-        },
-        select: {
-          id: true,
-          email: true,
-        },
-      }) 
-    
-      if(!authenticationUser) throw ERROR_MESSAGE.badRequest
-      
-      const passwordVerification = await verifyPassword(email, pwd)
-      if(!passwordVerification) throw ERROR_MESSAGE.unauthorized
-    
-      const accessToken =  generateAccessToken(authenticationUser)
-      const refreshToken = generateRefreshToken(authenticationUser)
-      
-      const values ={
-        userId: authenticationUser.id,
-        refreshToken: refreshToken,
-      }
-    
-      await db.token.create({
-        data: values,
+          refreshToken: refreshToken
+        }
       })
-    
-      const returnValue = {
-        id: authenticationUser.id,
-        email: authenticationUser.email,
-        accessToken: accessToken,
-        refreshToken: refreshToken
-      }
-
       return returnValue
-    }
-    catch(error) {
+    } catch (error) {
       throw error
     }
   }
-
-  return { register, loginWithPassword };
+  return { register, loginWithPassword , logout };
 }
 
 export default authService;

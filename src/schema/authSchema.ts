@@ -1,4 +1,3 @@
-import { Ident } from './../../node_modules/@sinclair/typebox/build/cjs/parser/static/types.d';
 import { Type } from "@sinclair/typebox";
 
 const authBodySchema = Type.Object({
@@ -30,9 +29,19 @@ const loginSchema = Type.Object({
   }),
 });
 
+const logoutSchema = Type.Object({
+  response: Type.Object({
+    205: Type.Object({
+      message: Type.String(),
+      status: Type.Number(),
+      success: Type.Boolean(),
+    }),
+  }),
+});
 
 export {
     authBodySchema,
     registerSchema,
     loginSchema,
+    logoutSchema,
 }
