@@ -10,7 +10,12 @@ import articleService from '../../services/articleService'
 const articleRoute = async (fastify: FastifyInstance) => {
   fastify.route({
     method: 'POST',
-    schema: createArticleSchema,
+    schema: {
+      ...createArticleSchema,
+      tags: ['articles'],
+      summary: '게시글 작성',
+      description: '새로운 게시글을 작성합니다'
+    },
     url: '/',
     preHandler: [verifySignIn],
     handler: async (req:FastifyRequest<{Headers: TCommonHeaders, Body: TCommonBody}>, rep: FastifyReply) => {
@@ -30,7 +35,12 @@ const articleRoute = async (fastify: FastifyInstance) => {
 
   fastify.route({
     method: 'PUT',
-    schema: updateArticleSchema,
+    schema: {
+      ...updateArticleSchema,
+      tags: ['articles'],
+      summary: '게시글 수정',
+      description: '기존 게시글을 수정합니다'
+    },
     url: '/',
     preHandler: [verifySignIn],
     handler: async (req:FastifyRequest<{Headers: TCommonHeaders, Body: TCommonBody, Params: { articleId: number }}>, rep: FastifyReply) => {
@@ -52,7 +62,12 @@ const articleRoute = async (fastify: FastifyInstance) => {
     method: 'DELETE',
     url: '/:articleId',
     preHandler: [verifySignIn],
-    schema: deleteArticleSchema,
+    schema: {
+      ...deleteArticleSchema,
+      tags: ['articles'],
+      summary: '게시글 삭제',
+      description: '지정된 게시글을 삭제합니다'
+    },
     handler: async (req: FastifyRequest<{Headers: TCommonHeaders, Params: TCommonParam}>, rep: FastifyReply) => {
       try {
         const articleId = Number(req.params.articleId)

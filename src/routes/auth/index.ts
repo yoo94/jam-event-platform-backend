@@ -9,7 +9,12 @@ const authRoute = async (fastify: FastifyInstance) => {
   fastify.post(
     "/register",
     {
-      schema: registerSchema,
+      schema: {
+        ...registerSchema,
+        tags: ['auth'],
+        summary: '사용자 회원가입',
+        description: '새로운 사용자를 등록합니다'
+      },
     },
     async (request: FastifyRequest<{Body: TAuthBody}>, reply: FastifyReply) => {
       const {email, pwd} = request.body;
@@ -23,7 +28,14 @@ const authRoute = async (fastify: FastifyInstance) => {
     }
   );
   
-  fastify.post('/login', {schema: loginSchema}, async (req:FastifyRequest<{Body: TAuthBody}>, rep: FastifyReply) => {
+  fastify.post('/login', {
+    schema: {
+      ...loginSchema,
+      tags: ['auth'],
+      summary: '사용자 로그인',
+      description: '이메일과 비밀번호로 로그인합니다'
+    }
+  }, async (req:FastifyRequest<{Body: TAuthBody}>, rep: FastifyReply) => {
     const { email, pwd } = req.body
 
     try {
@@ -52,7 +64,14 @@ const authRoute = async (fastify: FastifyInstance) => {
     }
   })
 
-  fastify.delete('/logout', {schema: logoutSchema}, async (req: FastifyRequest, rep: FastifyReply) => {
+  fastify.delete('/logout', {
+    schema: {
+      ...logoutSchema,
+      tags: ['auth'],
+      summary: '사용자 로그아웃',
+      description: '현재 로그인된 사용자를 로그아웃합니다'
+    }
+  }, async (req: FastifyRequest, rep: FastifyReply) => {
     const refresh_token = req.cookies.refresh_token;
     if(!refresh_token) {
       return rep.status(ERROR_MESSAGE.unauthorized.status).send(ERROR_MESSAGE.unauthorized);
@@ -66,7 +85,14 @@ const authRoute = async (fastify: FastifyInstance) => {
     }
   })
 
-  fastify.post('refresh', {schema: refreshTokenSchema}, async (req: FastifyRequest, rep: FastifyReply) => {
+  fastify.post('refresh', {
+    schema: {
+      ...refreshTokenSchema,
+      tags: ['auth'],
+      summary: '토큰 갱신',
+      description: 'Refresh Token으로 새로운 Access Token을 발급받습니다'
+    }
+  }, async (req: FastifyRequest, rep: FastifyReply) => {
     const refresh_token = req.cookies.refresh_token;
     if(!refresh_token) {
       return rep.status(ERROR_MESSAGE.unauthorized.status).send(ERROR_MESSAGE.unauthorized);
