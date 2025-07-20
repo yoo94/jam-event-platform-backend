@@ -9,7 +9,12 @@ import likeService from '../../services/likeService'
 const likeRoute = async (fastify: FastifyInstance ) => {
   fastify.route({
     method: 'POST',
-    schema: addLikeSchema,
+    schema: {
+      ...addLikeSchema,
+      tags: ['like'],
+      summary: '좋아요 추가',
+      description: '게시물에 좋아요를 추가합니다'
+    },
     url: '/add/:articleId',
     preHandler: [verifySignIn],
     handler: async (req:FastifyRequest<{ Headers: TCommonHeaders, Params: TCommonParam}>, rep: FastifyReply) => {
@@ -28,7 +33,12 @@ const likeRoute = async (fastify: FastifyInstance ) => {
 
   fastify.route({
     method: 'GET',
-    schema: readLikesSchema,
+    schema: {
+      ...readLikesSchema,
+      tags: ['like'],
+      summary: '좋아요 목록 조회',
+      description: '사용자가 좋아요한 게시물 목록을 조회합니다'
+     },
     url: '/',
     preHandler: [ verifySignIn],
     handler: async (req: FastifyRequest<{Headers: TCommonHeaders, Querystring: TCommonQuery}>, rep: FastifyReply) => {
@@ -47,7 +57,12 @@ const likeRoute = async (fastify: FastifyInstance ) => {
 
   fastify.route({
     method: 'POST',
-    schema: cancelLikeSchema,
+    schema: {
+      ...cancelLikeSchema,
+      tags: ['like'],
+      summary: '좋아요 취소',
+      description: '게시물에 대한 좋아요를 취소합니다'
+    },
     url: '/cancel/:articleId',
     preHandler: [verifySignIn],
     handler: async (req:FastifyRequest<{Headers: TCommonHeaders, Params: TCommonParam}>, rep: FastifyReply) => {

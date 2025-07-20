@@ -13,7 +13,12 @@ const commentRoute = async ( fastify: FastifyInstance) => {
 
   fastify.route({
     method: 'POST',
-    schema: createCommentSchema,
+    schema: { 
+      ...createCommentSchema,
+      tags: ['comments'],
+      summary: '댓글 추가',
+      description: '게시물에 댓글을 추가합니다'
+    },
     url: '/',
     preHandler: [verifySignIn],
     handler: commentController.createComment
@@ -34,7 +39,12 @@ const commentRoute = async ( fastify: FastifyInstance) => {
 
   fastify.route({
     method: 'GET',
-    schema: readCommentSchema,
+    schema: {
+      ...readCommentSchema,
+      tags: ['comments'],
+      summary: '댓글 조회',
+      description: '게시물에 대한 댓글을 조회합니다'
+    },
     url: '/:articleId',
     handler: commentController.readComment
     // handler: async (req: FastifyRequest<{Headers: TCommonHeaders, Params: TCommonParam}>, rep: FastifyReply) => {
@@ -52,7 +62,12 @@ const commentRoute = async ( fastify: FastifyInstance) => {
 
   fastify.route({
     method: 'DELETE',
-    schema: deleteCommentSchema,
+    schema: {
+      ...deleteCommentSchema,
+      tags: ['comments'],
+      summary: '댓글 삭제',
+      description: '게시물에 대한 댓글을 삭제합니다'
+    },
     url: '/',
     preHandler: [verifySignIn, verifyCommentUser],
     handler: commentController.deleteComment

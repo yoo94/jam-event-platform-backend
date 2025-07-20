@@ -13,6 +13,8 @@ export const swaggerOptions = {
       { name: 'auth', description: '인증 관련 API' },
       { name: 'articles', description: '게시글 관련 API' },
       { name: 'users', description: '사용자 관련 API' },
+      { name: 'like', description: '좋아요 관련 API' },
+      { name: 'comments', description: '댓글 관련 API' },
     ],
   },
 };
