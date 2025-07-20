@@ -54,9 +54,28 @@ function articleService() {
     }
   }
 
+  const deleteArticle = async (articleId: number, userId: number) => {
+    try {
+    console.log('deleteArticle called', articleId)
+
+      const checkVerifyUser = await verifyArticleUser(articleId, userId)
+      if (checkVerifyUser) {
+        const result = await db.article.delete({
+          where: { id: articleId }
+        })
+        return result
+      } else {
+        throw ERROR_MESSAGE.badRequest
+      }
+    } catch (error) {
+      throw error
+    }
+  }
+
   return {
     createArticle,
-    updateArticle
+    updateArticle,
+    deleteArticle
   }
 }
 
