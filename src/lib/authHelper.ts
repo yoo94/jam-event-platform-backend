@@ -3,6 +3,7 @@ import db from './db';
 import { ACCESS_TOKEN_EXPIRES, ERROR_MESSAGE ,REFRESH_TOKEN_EXPIRES,ROUND, SECRET_KEY} from './constants';
 import jwt , {JwtPayload} from 'jsonwebtoken'
 import { handleError } from './errorHelper';
+import { FastifyReply, FastifyRequest } from 'fastify'
 
 const generateHash= async (pwd: string) =>{
     console.log('Generating hash for password:', pwd, 'with ROUND:', ROUND);
@@ -98,6 +99,19 @@ const verifyAccessToken = (access_token: string) => {
   }
 }
 
+
+const verifySignIn = async (req: FastifyRequest, rep: FastifyReply) => {
+  const userId = req.user?.id
+  const email = req.user?.email
+
+  if(userId && email) {
+    return // 토큰에도 이상이 없으면 true 리턴
+  }
+  else {
+    handleError(rep, ERROR_MESSAGE.unauthorized)
+  }
+}
+
 export {
    generateHash,
    duplicateVerifyUser,
@@ -106,5 +120,6 @@ export {
    generateRefreshToken,
    verifyRefreshToken,
    shortVerifyRefreshToken,
-   verifyAccessToken
+   verifyAccessToken,
+   verifySignIn
 };

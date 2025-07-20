@@ -4,7 +4,6 @@ import { FastifyInstance ,FastifyRequest, FastifyReply} from "fastify";
 import authService from "../../services/authService";
 import { ERROR_MESSAGE,SUCCESS_MESSAGE } from "../../lib/constants";
 import { handleError } from "../../lib/errorHelper";
-import { error } from "console";
 
 const authRoute = async (fastify: FastifyInstance) => {
   fastify.post(
@@ -52,7 +51,7 @@ const authRoute = async (fastify: FastifyInstance) => {
       handleError(rep, ERROR_MESSAGE.badRequest, error)
     }
   })
-  
+
   fastify.delete('/logout', {schema: logoutSchema}, async (req: FastifyRequest, rep: FastifyReply) => {
     const refresh_token = req.cookies.refresh_token;
     if(!refresh_token) {
