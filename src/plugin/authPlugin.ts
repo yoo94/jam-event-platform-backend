@@ -6,7 +6,7 @@ import { TCommonHeaders } from '../schema/types';
 declare module 'fastify' {
     interface FastifyRequest {
       user: {
-        id: string;
+        id: number;
         email: string;
       } | null;
     }
