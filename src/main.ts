@@ -6,9 +6,15 @@ import { SECRET_KEY } from "./lib/constants.js";
 import { currentlyAuthPlugin } from "./plugin/authPlugin.js";
 import { checkStartupUser, checkStartupArticle } from "./startup/inedx";
 import { swaggerOptions, swaggerUIOptions } from "./config/swagger.js";
+import fs from 'fs';
 
 const fastify = Fastify({
-  logger: true
+  logger: true,
+  // 주석 풀면 openssl을 사용하여 HTTPS 설정 가능
+  // https: {
+  //   key: fs.readFileSync('./server.key'),
+  //   cert: fs.readFileSync('./server.crt'),
+  // }
 }).withTypeProvider<TypeBoxTypeProvider>();
 
 // Swagger 등록
@@ -27,7 +33,6 @@ const start = async () => {
     await checkStartupUser();
     await checkStartupArticle();
     await fastify.listen({ port: 8083 });
-    console.log("Server is running on http://localhost:8083");
   } catch (err) {
     fastify.log.error(err);
     process.exit(1);
