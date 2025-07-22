@@ -8,9 +8,11 @@
   "main": "index.js",
   "scripts": {
     "start:build": "tsc -w --project tsconfig.json && npx -p tsconfig.json",
+    "build": "tsc",
     "build:livenodemon": "nodemon --watch 'src/' --exec node --loader ts-node/esm src/main.ts --verbose",
     "build:live": "npx tsx src/main.ts",
-    "start": "npm run build:live"
+    "start": "npm run build:live",
+    "docker": "docker build -f deploy/Dockerfile -t jam-event-platform-backend . && docker run -p 8083:8083 jam-event-platform-backend"
   },
   "dependencies": {
     "@fastify/cookie": "^11.0.2",

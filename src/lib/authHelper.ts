@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
 import db from './db';
 import { ACCESS_TOKEN_EXPIRES, ERROR_MESSAGE ,REFRESH_TOKEN_EXPIRES,ROUND, SECRET_KEY} from './constants';
-import jwt , {JwtPayload} from 'jsonwebtoken'
+import jwt, { JwtPayload } from 'jsonwebtoken'
 import { handleError } from './errorHelper';
 import { FastifyReply, FastifyRequest } from 'fastify'
 
@@ -49,12 +49,12 @@ const verifyPassword = async (email: string, pwd: string) => {
 }
 
 const generateAccessToken = (user: { id: number, email: string }) => {
-  const accessToken = jwt.sign({id: user.id, email: user.email}, SECRET_KEY, {expiresIn: ACCESS_TOKEN_EXPIRES} )
+  const accessToken = jwt.sign({id: user.id, email: user.email}, SECRET_KEY, {expiresIn: "60m"} )
   return accessToken
 }
 
 const generateRefreshToken = (user: { id: number, email: string }) => {
-  const refreshToken = jwt.sign({id: user.id, email: user.email}, SECRET_KEY, {expiresIn: REFRESH_TOKEN_EXPIRES})
+  const refreshToken = jwt.sign({id: user.id, email: user.email}, SECRET_KEY, { expiresIn: "7d" })
   return refreshToken
 }
 

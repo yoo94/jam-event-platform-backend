@@ -39,7 +39,7 @@ const start = async () => {
   try {
     await checkStartupUser();
     await checkStartupArticle();
-    await fastify.listen({ port: 8083 });
+    await fastify.listen({ port: 8083, host: "0.0.0.0" });
   } catch (err) {
     fastify.log.error(err);
     process.exit(1);
