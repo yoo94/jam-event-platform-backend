@@ -5,8 +5,7 @@ export const swaggerOptions = {
       description: 'JAM 이벤트 플랫폼 백엔드 API 문서',
       version: '1.0.0',
     },
-    host: 'localhost:8083',
-    schemes: ['http'],
+    schemes: ['http','https'],
     consumes: ['application/json'],
     produces: ['application/json'],
     tags: [
