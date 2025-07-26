@@ -14,3 +14,8 @@ prisma
 - startup - 서버가 실행할때 관련된 코드
 - package.json
 - tsconfig.json
+
+```bash
+docker build -f deploy/Dockerfile -t jam-event-platform-backend .
+
+```
